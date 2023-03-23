@@ -63,6 +63,7 @@ class DatabaseSeeder extends Seeder
                 'pendidikan' => 'S1',
                 'pertama_kerja' => '2022-01-01',
                 'aktif' => '1',
+                
             ],
         ];
 
