@@ -5,10 +5,13 @@
         <div class="authentication-wrapper authentication-basic  ">
             <div class="authentication-inner py-4">
                 <!-- Login -->
-                <div class="card">
-                    {{-- <img class="card-img-top h-200px" src="{{ asset('element/logo/Group 1.png') }}" alt="Card image cap"> --}}
+                <div class="card pt-10">
+                    <br>
+                    <center>
+                        <img class="center pt-10 w-50 h-100px img-icon" src="https://abpptsi.org/wp-content/uploads/2019/06/LOGO-YCC-2019-.jpg" alt="Card image cap">
+                    </center>
+                   
                     <div class="card-body">
-
                         <!-- /Logo -->
                         <h4 class="mb-1 text-center">Login</h4>
 
@@ -32,46 +35,20 @@
                                         <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
                                     </div>
                                 </div>
-                                <div class="mb-2 mt-3">
-                                    <div class="form-group text-center">
-                                        <div class="captcha mb-2">
-                                            <span>{!! captcha_img('math') !!}</span>
-                                            <button type="button" class="btn btn-success btn-sm refresh-cpatcha"><i
-                                                    class="fa fa-refresh"></i></button>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-2"></div>
-                                            <div class="col">
-                                                <input id="captcha" type="text" class="form-control"
-                                                    placeholder="Enter Captcha" name="captcha">
-                                                @error('captcha')
-                                                    <div class="alert alert-danger">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-2"></div>
-                                        </div>
-
-
-                                    </div>
-                                </div>
+                               
                             </div>
 
 
 
                         </form>
                         <div class="mb-3">
-                            <button type='button' id='btnlogin' class="btn btn-info d-grid w-100">Login</button>
+                            <button type='button' id='btnlogin' class="btn btn-success d-grid w-100">Login</button>
                         </div>
 
                         <p class="text-center">
-                            <span class='text-muted'>Don't have account yet?</span>
+                            <span class='text-muted'>Belum punya akun ?</span>
                             <a href="">
-                                <span class='text-info'> Register Here</span>
-                            </a>
-                            <br>
-                            <span class='text-muted'>Forgot Password?</span>
-                            <a href="">
-                                <span class='text-info'> Reset Password</span>
+                                <span class='text-success'>Daftar disini</span>
                             </a>
                         </p>
 

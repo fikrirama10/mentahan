@@ -56,7 +56,6 @@ data-assets-path="../../assets/" data-template="horizontal-menu-template-no-cust
         href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}" />
     <link rel="stylesheet"
         href="{{ asset('assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css') }}" />
-    <link rel="stylesheet" href="{{ asset('element/status.css') }}" />
     <!-- Page CSS -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/cards-advance.css') }}" />
     <!-- Helpers -->
@@ -120,6 +119,8 @@ data-assets-path="../../assets/" data-template="horizontal-menu-template-no-cust
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/cleavejs/cleave.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/cleavejs/cleave-phone.js') }}"></script>
     <!-- Main JS -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('assets/js/ui-popover.js') }}"></script>
@@ -129,7 +130,12 @@ data-assets-path="../../assets/" data-template="horizontal-menu-template-no-cust
     <script src="{{ asset('assets/js/dashboards-analytics.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/bootstrap-select/bootstrap-select.js') }}"></script>
     @stack('scripts')
-    
+    <script>
+        new Cleave(".numeral-mask", {
+            numeral: true,
+            numeralThousandsGroupStyle: "thousand"
+        });
+    </script>
 </body>
 
 

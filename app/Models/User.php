@@ -7,38 +7,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Alfa6661\AutoNumber\AutoNumberTrait;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    use HasFactory;
+    use AutoNumberTrait;
+    protected $table = 'users';
+    protected $guarded = [];
+    public function getAutoNumberOptions()
+    {        
+        return [
+            'no_presensi' => [
+                'format' => function () {
+                    $absen  = DB::table('tbl_kode_absen')->where('id',$this->id_presensi)->first();
+                    return  $absen->kode_absen.'-?'; // autonumber format. '?' will be replaced with the generated number.
+                },
+                'length' => 3 // The number of digits in the autonumber
+            ]
+        ];
+    }
 }
