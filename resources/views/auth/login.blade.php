@@ -8,14 +8,15 @@
                 <div class="card pt-10">
                     <br>
                     <center>
-                        <img class="center pt-10 w-50 h-100px img-icon" src="https://abpptsi.org/wp-content/uploads/2019/06/LOGO-YCC-2019-.jpg" alt="Card image cap">
+                        <img class="center pt-10 w-50 h-100px img-icon"
+                            src="https://abpptsi.org/wp-content/uploads/2019/06/LOGO-YCC-2019-.jpg" alt="Card image cap">
                     </center>
-                   
+
                     <div class="card-body">
                         <!-- /Logo -->
                         <h4 class="mb-1 text-center">Login</h4>
 
-                        <form id="formAuthentications" class="mb-2" action="" method="POST">
+                        <form action='{{ route('auth') }}' id="formAuthentications" class="mb-2" action="" method="POST">
                             @csrf
                             <div class="fv-row">
                                 <div class="mb-2">
@@ -35,16 +36,16 @@
                                         <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
                                     </div>
                                 </div>
-                               
+
                             </div>
 
 
 
-                        </form>
-                        <div class="mb-3">
-                            <button type='button' id='btnlogin' class="btn btn-success d-grid w-100">Login</button>
-                        </div>
 
+                            <div class="mb-3">
+                                <button type='button' id='btnlogin' class="btn btn-success d-grid w-100">Login</button>
+                            </div>
+                        </form>
                         <p class="text-center">
                             <span class='text-muted'>Belum punya akun ?</span>
                             <a href="">

@@ -28,4 +28,7 @@ class User extends Authenticatable
             ]
         ];
     }
+    function jabatan(){
+        return $this->hasOne(Jabatan::class,'id','id_jabatan');
+    }
 }

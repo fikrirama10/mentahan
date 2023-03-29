@@ -121,36 +121,59 @@ class Penilian
             }
         }
     }
-    // public static function cek_total($id_nilai,$id_user){
-    //     $disiplin = DB::table('tbl_penilaian_detail')->where('id_penilaian',$id_nilai)->where('id_kriteria',2)->where('id_user',$id_user)->get();
-    //     $sikap = DB::table('tbl_penilaian_detail')->where('id_penilaian',$id_nilai)->where('id_kriteria',3)->where('id_user',$id_user)->get();
-    //     $kualitas = DB::table('tbl_penilaian_detail')->where('id_penilaian',$id_nilai)->where('id_kriteria',4)->where('id_user',$id_user)->get();
+    public static function get_total_laporan($tahun,$user){
+        $kriteria = DB::table('tbl_kriteria')->get();        
+        $total = 0;
+        foreach($kriteria as $kr){
+            $total_nilai = DB::table('tbl_penilaian_total')->join('tbl_penilaian','tbl_penilaian_total.id_penilaian','=','tbl_penilaian.id')->where('tbl_penilaian.id_user',$user)->where('tbl_penilaian.tahun',$tahun)->where('id_kriteria',$kr->id)->sum('tbl_penilaian_total.nilai_persen');
+            $nilai_total = $total_nilai / 12 ;
+            $tahap1 = 100 - $nilai_total ;
+            $tahap2 = $kr->bobot / 100;
+            $tahap3 = $tahap2 * $tahap1;
+            $total += $tahap3;
+        }
+        return  round($total,2);
+    }
+    public static function get_nilai_laporan($tahun,$kriteria,$user){
+        $penilaian = DB::table('tbl_penilaian')->where('tahun',$tahun)->get();
+        $total = 0;
+        foreach($penilaian as $p){
+            $total_nilai = DB::table('tbl_penilaian_total')->where('id_user',$user)->where('id_penilaian',$p->id)->where('id_kriteria',$kriteria)->sum('nilai_persen');
+            $total += $total_nilai;
+        }
+        $total = $total / 12;
+        return round($total,2);
+    }
+    public static function get_laporan_all($tahun,$kode_absen){
+        $nilai = DB::table('tbl_penilaian')->leftJoin('users','tbl_penilaian.id_user','=','users.id')->select([
+            'tbl_penilaian.*',
+            'users.name',
+            'users.no_presensi',
+            'users.aktif',
+        ])->where('tahun',$tahun)->where('users.aktif',1)->where('users.id_presensi',$kode_absen)->groupBy('id_user')->get();
+        $array_nilai = array();        
+        foreach($nilai as $n){
+            $kriteria = DB::table('tbl_kriteria')->get();
+            $array_kriteria = array();
+            foreach($kriteria as $kr){
+                array_push($array_kriteria,[
+                    'id_kriteria'=>$kr->id,
+                    'kriteria'=>$kr->kriteria,
+                    'nilai'=>Penilian::get_nilai_laporan($tahun,$kr->id,$n->id_user),
+                ]);
+            }
+            array_push($array_nilai,[
+                'id'=>$n->id_user,
+                'no_presensi'=>$n->no_presensi,
+                'nama'=>$n->name,
+                'kriteria'=>$array_kriteria,
+                'total'=> Penilian::get_total_laporan($n->tahun,$n->id_user),
+                //'rank'=>$no++,
+            ]);
+        }
+        $keys = array_column($array_nilai, 'total');
+        array_multisort($keys, SORT_ASC, $array_nilai);
 
-    //     if(count($disiplin) > 0){
-    //         $nilai_disiplin = 0;
-           
-    //         $kriteria = DB::table('tbl_kriteria')->where('id',2)->first();
-    //         foreach($disiplin as $ds)
-    //         {                
-    //             $sub_kriteria = DB::table('tbl_sub_kriteria')->where('id',$ds->id_sub_kriteria)->first();
-    //             $nilai_disiplin += $sub_kriteria->bobot_sub;
-    //         }
-    //         $nilai_disiplin_persen = ($kriteria->bobot / 100) * $nilai_disiplin;
-    //         DB::table('tbl_penilaian_total')->insert([
-    //             'id_penilaian'=>$id_nilai,
-    //             'id_user'=>$id_user,
-    //             'id_kriteria'=>2,
-    //             'nilai'=>$nilai_disiplin,
-    //             'nilai_persen'=>$nilai_disiplin_persen,
-    //         ]);
-    //     }else{
-    //         DB::table('tbl_penilaian_total')->insert([
-    //             'id_penilaian'=>$id_nilai,
-    //             'id_user'=>$id_user,
-    //             'id_kriteria'=>2,
-    //             'nilai'=>0,
-    //             'nilai_persen'=>0,
-    //         ]);
-    //     }
-    // }
+        return $array_nilai;
+    }
 }
