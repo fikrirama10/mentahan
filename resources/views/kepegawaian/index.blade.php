@@ -3,7 +3,7 @@
 @section('content')
     <div class="card border">
         <div class="card-header d-flex justify-content-between pb-1">
-            <h5 class="mb-0 card-title">Data Kepegawaian</h5>
+            <h5 class="mb-0 card-title">{{ $title }}</h5>
 
             <button class='btn btn-success' data-bs-toggle="modal" data-bs-target="#exLargeModal"><i
                     class="menu-icon tf-icons ti ti-playlist-add"></i> Tambah Data</button>
@@ -57,10 +57,7 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="col-md-4">
-                                                <input name='no_absen' id='no_absen' class="form-control numeral-mask"
-                                                    type="text">
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -147,6 +144,50 @@
 @endsection
 @push('scripts')
     <script type="text/javascript">
+        function btnBack(id){
+            Swal.fire({
+                title: '',
+                text: "Yakin mengaktifkan pegawai ? ",
+                showCancelButton: false,
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: "Simpan",
+                customClass: {
+                    confirmButton: 'btn btn-primary me-1',
+                    cancelButton: 'btn btn-label-danger'
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let url = '{{ route('aktif', ':post_id') }}';
+                    url = url.replace(':post_id', id);
+                    window.location = url;
+                }
+            })
+        }
+        function btnDelete(id){
+            Swal.fire({
+                title: '',
+                text: "Yakin menonaktifkan pegawai ? ",
+                showCancelButton: false,
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: "Simpan",
+                customClass: {
+                    confirmButton: 'btn btn-primary me-1',
+                    cancelButton: 'btn btn-label-danger'
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let url = '{{ route('nonaktif', ':post_id') }}';
+                    url = url.replace(':post_id', id);
+                    window.location = url;
+                }
+            })
+        }
         const form = document.querySelector('#form_tambah');
         var validatorPersonalData = FormValidation.formValidation(
             form, {
@@ -165,13 +206,6 @@
                             },
                             emailAddress: {
                                 message: 'Format email salah',
-                            },
-                        }
-                    },
-                    no_absen: {
-                        validators: {
-                            notEmpty: {
-                                message: 'No Absen harus dipilih'
                             },
                         }
                     },

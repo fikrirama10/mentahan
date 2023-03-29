@@ -12,8 +12,15 @@ use Yajra\DataTables\Facades\DataTables;
 
 class KepegawaianController extends Controller
 {
-    public function index()
+    public function index($aktif = '')
     {
+        if ($aktif) {
+            $aktifin = 0;
+            $title = 'Data Pegawai Non Aktif';
+        } else {
+            $aktifin = 1;
+            $title = 'Data Pegawai Aktif';
+        }
         if (request()->ajax()) {
             $data = DB::table('users')
                 ->select([
@@ -21,42 +28,56 @@ class KepegawaianController extends Controller
                     'tbl_jabatan.jabatan',
                 ])
                 ->leftJoin('tbl_jabatan', 'users.id_jabatan', '=', 'tbl_jabatan.id')
-                ->where('id_jabatan', '!=', 1)->where('aktif',1);
+                ->where('id_jabatan', '!=', 1)->where('aktif', $aktifin);
             return DataTables::query($data)->addColumn('action', function ($data) {
                 $html_edit = '<a href="' . route('detail-pegawai', $data->id) . '" class="btn btn-warning btn-xs"><i class=" tf-icons ti ti-edit"></i></a>';
-                $html_delete = '<a href="' . route('nonaktif', $data->id) . '" class="btn btn-danger btn-xs"><i class=" tf-icons ti ti-trash"></i></a>';
-                return $html_edit.' '.$html_delete;
+                if ($data->aktif == 1) {
+                    $html_delete = '<button onclick="btnDelete(' . $data->id . ')" class="btn btn-danger btn-xs"><i class=" tf-icons ti ti-trash"></i></button>';
+                } else {
+                    $html_delete = '<button onclick="btnBack(' . $data->id . ')" class="btn btn-info btn-xs"><i class=" tf-icons ti ti-arrow-back-up"></i></button>';
+                }
+
+                return $html_edit . ' ' . $html_delete;
             })->rawColumns(['action'])->make(true);
         }
         $noabsen = DB::table('tbl_kode_absen')->get();
-        $jabatan = DB::table('tbl_jabatan')->get();
-        return view('kepegawaian.index',[
-            'title'=>'Detail Pegawai',
-            'id'=>'kepegawaian'
-        ],compact('noabsen','jabatan'));
+        $jabatan = DB::table('tbl_jabatan')->where('id', '!=', 1)->get();
+        return view('kepegawaian.index', [
+            'title' => $title,
+            'id' => 'kepegawaian'
+        ], compact('noabsen', 'jabatan'));
     }
-    public function nonaktif($id){
-        User::where('id',$id)->update([
-            'aktif'=>0
+    public function aktif($id){
+        User::where('id', $id)->update([
+            'aktif' => 1
+        ]);
+        Alert::success('Pegawai berhasil di aktifkan');
+        return back();
+    }
+    public function nonaktif($id)
+    {
+        User::where('id', $id)->update([
+            'aktif' => 0
         ]);
         Alert::success('Pegawai berhasil di non aktifkan');
         return back();
     }
-    public function post_tambah(Request $request){
+    public function post_tambah(Request $request)
+    {
         //return $request->all();
         $random = rand();
         $request->validate([
-            "kode_absen"=>"required",
-            "no_absen"=>"required",
-            "nama"=>"required",
-            "alamat"=>"required",
-            "jenis_kelamin"=>"required",
-            "jabatan"=>"required",
-            "pertama_kerja"=>"required",
-            "pengabdian"=>"required",
-            "pendidikan"=>"required",
-            "foto"=>"required",
-            "email"=>"required",
+            "kode_absen" => "required",
+            "no_absen" => "required",
+            "nama" => "required",
+            "alamat" => "required",
+            "jenis_kelamin" => "required",
+            "jabatan" => "required",
+            "pertama_kerja" => "required",
+            "pengabdian" => "required",
+            "pendidikan" => "required",
+            "foto" => "required",
+            "email" => "required",
         ]);
 
         if ($request->hasFile('foto')) {
@@ -66,20 +87,28 @@ class KepegawaianController extends Controller
         }
 
         $pegawai = User::create([
-            'id_jabatan'=>$request->jabatan,
-            'id_presensi'=>$request->kode_absen,
-            'name'=>$request->nama,
-            'foto'=>$foto,
-            'alamat'=>$request->alamat,
-            'jenis_kelamin'=>$request->jenis_kelamin,
-            'pertama_kerja'=>$request->pertama_kerja,
-            'email'=>$request->email,
-            'password'=>Hash::make('12345'),
-            'pengabdian'=>$request->pengabdian,
-            'pendidikan'=>$request->pendidikan,
-            'aktif'=>1,
+            'id_jabatan' => $request->jabatan,
+            'id_presensi' => $request->kode_absen,
+            'name' => $request->nama,
+            'foto' => $foto,
+            'alamat' => $request->alamat,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'pertama_kerja' => $request->pertama_kerja,
+            'email' => $request->email,
+            'password' => Hash::make('12345'),
+            'pengabdian' => $request->pengabdian,
+            'pendidikan' => $request->pendidikan,
+            'aktif' => 1,
         ]);
         Alert::success('Data berhasil ditambah');
         return back();
+    }
+
+    public function edit_pegawai($id){
+        $pegawai = User::where('id',$id)->first();
+        return view('kepegawaian.edit',[
+            'title'=>'Kepegawaian',
+            'id'=>'kepegawaian'
+        ],compact('pegawai'));
     }
 }

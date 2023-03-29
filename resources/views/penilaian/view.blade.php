@@ -64,7 +64,8 @@
                                                 $total_persen += Penilaian::get_nilai_akhir($nilai_persen, $kl->id);
                                             @endphp
                                             <td>{{ Penilaian::get_total($data->id, $kl->id, $tahun) }}</td>
-                                            <td>{{ round(Penilaian::get_total($data->id, $kl->id, $tahun) / 12, 2) }} %</td>
+                                            <td>{{ round(Penilaian::get_total($data->id, $kl->id, $tahun) / 12, 2) }} %
+                                            </td>
                                         </tr>
                                     @endforeach
                                     <tr class='fw-bold'>
@@ -91,10 +92,10 @@
         </div>
         <div class="card-body">
             <br>
-            <form action="{{ route('post-nilai', $data->id) }}" method="post">
+            <form id='post_nilai' action="{{ route('post-nilai', $data->id) }}" method="post">
                 @csrf
                 <input type="hidden" name='id_user' value='{{ $data->id }}'>
-                <div class="row">
+                <div class="row mb-3">
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-2">
@@ -185,14 +186,14 @@
                     </div>
                 </div>
                 <br>
-                <button class='btn btn-success'>Save</button>
+                <button type='button' id='btn_simpan' class='btn btn-success'>Save</button>
             </form>
         </div>
     </div>
 @endsection
 @push('scripts')
     <script>
-            $('#button_ranking').click(function() {
+        $('#button_ranking').click(function() {
             var tahun = $('#tahun_ranking').val();
             var id = {{ $data->id }};
 
@@ -203,7 +204,7 @@
                 $('#ranking_hasil').html(data);
             })
         })
-        
+
         $('#presesnsi').click(function() {
             $('#presesnsi').val('');
             $('#poin').val('');
@@ -246,6 +247,74 @@
             }
 
 
-        })
+        });
+
+        const form = document.querySelector('#post_nilai');
+        var validatorPersonalData = FormValidation.formValidation(
+            form, {
+                fields: {
+                    tahun: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Tahun harus dipilih'
+                            },
+                        }
+                    },
+                    bulan: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Bulan harus diisi'
+                            },
+                        }
+                    },
+                    presensi: {
+                        validators: {
+                            notEmpty: {
+                                message: 'Presensi harus diisi'
+                            },
+                        }
+                    },
+                },
+                plugins: {
+                    autoFocus: new FormValidation.plugins.AutoFocus(),
+                    trigger: new FormValidation.plugins.Trigger(),
+                    bootstrap5: new FormValidation.plugins.Bootstrap5({
+                        eleValidClass: '',
+                        rowSelector: '.mb-3'
+                    }),
+
+                },
+            });
+        var confirmSave = document.querySelector('#btn_simpan');
+        confirmSave.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (validatorPersonalData) {
+                validatorPersonalData.validate().then(function(status) {
+                    if (status == 'Valid') {
+                        Swal.fire({
+                            title: 'Apakah Nilai yang anda input sudah benar ??',
+                            text: "Yakin menyimpan data ? data yang sudah di simpan tidak dapat di edit",
+                            showCancelButton: false,
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: "Simpan",
+                            customClass: {
+                                confirmButton: 'btn btn-primary me-1',
+                                cancelButton: 'btn btn-label-danger'
+                            },
+                            buttonsStyling: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                setTimeout(function() {
+                                    form.submit();
+                                }, 1000);
+                            }
+                        })
+                    }
+                });
+            }
+
+        });
     </script>
 @endpush

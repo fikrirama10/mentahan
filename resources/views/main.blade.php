@@ -131,10 +131,10 @@ data-assets-path="../../assets/" data-template="horizontal-menu-template-no-cust
     <script src="{{ asset('assets/vendor/libs/bootstrap-select/bootstrap-select.js') }}"></script>
     @stack('scripts')
     <script>
-        new Cleave(".numeral-mask", {
-            numeral: true,
-            numeralThousandsGroupStyle: "thousand"
-        });
+        // new Cleave(".numeral-mask", {
+        //     numeral: true,
+        //     numeralThousandsGroupStyle: "thousand"
+        // });
     </script>
 </body>
 
