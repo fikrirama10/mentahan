@@ -8,8 +8,7 @@
 
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         <div class="navbar-nav align-items-center">
-            <i class="fa fa-tree fa-2x"></i>&nbsp; 
-            <span class='fw-bold'>Yayasan Citra Cemara</span> 
+            
         </div>
 
         <ul class="navbar-nav flex-row align-items-center ms-auto">
