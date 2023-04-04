@@ -39,9 +39,15 @@
                         <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="{{ route('profil') }}">
                             <i class="ti ti-user-check me-2 ti-sm"></i>
-                            <span class="align-middle">My Profile</span>
+                            <span class="align-middle">Profil Saya</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ route('ganti-password') }}">
+                            <i class="ti ti-key me-2 ti-sm"></i>
+                            <span class="align-middle">Ganti Password</span>
                         </a>
                     </li>
                     <li>
