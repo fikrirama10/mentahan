@@ -70,7 +70,6 @@ class KepegawaianController extends Controller
         $random = rand();
         $request->validate([
             "kode_absen" => "required",
-            "no_absen" => "required",
             "nama" => "required",
             "alamat" => "required",
             "jenis_kelamin" => "required",
