@@ -38,6 +38,6 @@
             </td>
             <td align='center'>{{ $an['total'] }} %</td>
             <td align='center'>{{ $ranking++ }}</td>
-        </tr>
+        </tr>        
     @endforeach
 </table>

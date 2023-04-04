@@ -46,12 +46,7 @@
                                 <button type='button' id='btnlogin' class="btn btn-success d-grid w-100">Login</button>
                             </div>
                         </form>
-                        <p class="text-center">
-                            <span class='text-muted'>Belum punya akun ?</span>
-                            <a href="">
-                                <span class='text-success'>Daftar disini</span>
-                            </a>
-                        </p>
+                        
 
                     </div>
                 </div>

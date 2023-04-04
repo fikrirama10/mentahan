@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Penilian;
+use App\Models\Jabatan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +31,7 @@ class KepegawaianController extends Controller
                 ->leftJoin('tbl_jabatan', 'users.id_jabatan', '=', 'tbl_jabatan.id')
                 ->where('id_jabatan', '!=', 1)->where('aktif', $aktifin);
             return DataTables::query($data)->addColumn('action', function ($data) {
-                $html_edit = '<a href="' . route('detail-pegawai', $data->id) . '" class="btn btn-warning btn-xs"><i class=" tf-icons ti ti-edit"></i></a>';
+                $html_edit = '<a href="' . route('edit-pegawai', $data->id) . '" class="btn btn-warning btn-xs"><i class=" tf-icons ti ti-edit"></i></a>';
                 if ($data->aktif == 1) {
                     $html_delete = '<button onclick="btnDelete(' . $data->id . ')" class="btn btn-danger btn-xs"><i class=" tf-icons ti ti-trash"></i></button>';
                 } else {
@@ -47,7 +48,8 @@ class KepegawaianController extends Controller
             'id' => 'kepegawaian'
         ], compact('noabsen', 'jabatan'));
     }
-    public function aktif($id){
+    public function aktif($id)
+    {
         User::where('id', $id)->update([
             'aktif' => 1
         ]);
@@ -104,11 +106,23 @@ class KepegawaianController extends Controller
         return back();
     }
 
-    public function edit_pegawai($id){
-        $pegawai = User::where('id',$id)->first();
-        return view('kepegawaian.edit',[
-            'title'=>'Kepegawaian',
-            'id'=>'kepegawaian'
-        ],compact('pegawai'));
+    public function edit_pegawai($id)
+    {
+        $pegawai = User::where('id', $id)->first();
+        $jabatan = Jabatan::get();
+
+        return view('kepegawaian.edit', [
+            'title' => 'Edit Pegawai',
+            'id' => 'kepegawaian'
+        ], compact('pegawai', 'jabatan'));
+    }
+
+    public function post_password(Request $request)
+    {
+        User::where('id', auth()->user()->id)->update([
+            'password' => Hash::make($request->password),
+        ]);
+        Alert::success('Password Berhasil di ganti');
+        return back();
     }
 }
