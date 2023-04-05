@@ -115,7 +115,28 @@ class KepegawaianController extends Controller
             'id' => 'kepegawaian'
         ], compact('pegawai', 'jabatan'));
     }
+    public function post_edit(Request $request, $id)
+    {
+        $email_user = User::where('id', $id)->first();
+        if ($request->email != $email_user->email) {
+            $user = User::where('email', $request->email)->first();
+            if ($user) {
+                Alert::error('Gagal Simpan Email Sudah Ada');
+                return back();
+            }
+        }
 
+        User::where('id', $id)->update([
+            'name' => $request->nama,
+            'alamat' => $request->alamat,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'id_jabatan' => $request->jabatan,
+            'pendidikan' => $request->pendidikan,
+            'pengabdian' => $request->pengabdian,
+        ]);
+        Alert::success('Data Berhasil di update');
+        return redirect(route('kepegawaian'));
+    }
     public function post_password(Request $request)
     {
         User::where('id', auth()->user()->id)->update([

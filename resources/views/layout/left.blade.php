@@ -1,8 +1,6 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo py-3 px-4 ms-2">
-        <a href="{{ route('home') }}" class="d-block w-100">
-           Admin
-        </a>
+
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
             <i class="ti ti-menu-2 d-none d-lg-block ti-sm align-middle"></i>
             <i class="ti ti-x d-block d-lg-none ti-sm align-middle"></i>
@@ -30,7 +28,7 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="{{ route('kepegawaian','nonaktif') }}" class="menu-link">
+                    <a href="{{ route('kepegawaian', 'nonaktif') }}" class="menu-link">
                         <div data-i18n="Pegawai Non Aktif">Pegawai Non Aktif</div>
                     </a>
                 </li>
