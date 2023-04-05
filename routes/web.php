@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/ranking-pegawai/{id}/{tahun}', [PenilaianController::class, 'ranking'])->name('ranking-pegawai');
         Route::post('/post-nilai/{id}', [PenilaianController::class, 'post_nilai'])->name('post-nilai');
         Route::post('/post-passsword', [KepegawaianController::class, 'post_password'])->name('post.password');
+        Route::post('/post-edit-pegawai/{id}', [KepegawaianController::class, 'post_edit'])->name('post.edit-pegawai');
     });
 
     Route::group(['prefix' => 'laporan'], function () {
