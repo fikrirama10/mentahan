@@ -104,6 +104,7 @@ class PenilaianController extends Controller
     public function post_nilai(Request $request, $id)
     {
         $cek = DB::table('tbl_penilaian')->where('id_user', $id)->where('bulan', $request->bulan)->where('tahun', $request->tahun)->first();
+        //Penilaian Presensi
         if ($cek) {
             Alert::error('Gagal menambahkan nilai , nilai sudah ada ');
             return back();
@@ -115,6 +116,7 @@ class PenilaianController extends Controller
             'tgl_buat' => date('Y-m-d H:i:s'),
             'keterangan' => 'keterangan',
         ]);
+        
         if ($penilaian) {
             if ($request->poin_absen) {
                 $presensi = DB::table('tbl_penilaian_detail')->insertGetId([
@@ -134,7 +136,7 @@ class PenilaianController extends Controller
                     ]);
                 }
             }
-
+            //end penilaian presensi
             if ($request->poin) {
                 foreach ($request->poin as $poin) {
                     $sub = DB::table('tbl_sub_kriteria')->where('id', $poin)->first();
@@ -147,6 +149,8 @@ class PenilaianController extends Controller
                     ]);
                 }
             }
+            //$penilaian adalah id dari hasil insert ke tabel penilaian
+            //$id adalah id dari pegawai yang di nilai
             Penilian::cek_total2($penilaian, $id);
         }
 
