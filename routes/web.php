@@ -39,6 +39,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'profil'], function () {
         Route::get('/', [ProfileController::class, 'index'])->name('profil');
         Route::get('/ganti-password', [ProfileController::class, 'ganti_password'])->name('ganti-password');
+        Route::post('/update-profil/{id}' , [ProfileController::class, 'update_profil'])->name('update-profil');
     });
     Route::group(['prefix' => 'kepegawaian'], function () {
         Route::get('/{aktif?}', [KepegawaianController::class, 'index'])->name('kepegawaian');

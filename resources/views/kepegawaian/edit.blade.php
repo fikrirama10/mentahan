@@ -85,7 +85,7 @@
                         <label for="">Foto</label>
                         <input type="file" accept=".jpg,.png" class='form-control' name='foto'>
                         <br>
-                        <button class='btn btn-success'>Update</button>
+                        <button type='submit' class='btn btn-success'>Updatee</button>
                     </div>
                 </div>
             </div>
