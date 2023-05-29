@@ -36,7 +36,7 @@
                                 <select name="kode_absen" class='form-select' id="kode_absen">
                                     @foreach ($kode_absen as $ka)
                                         <option value="{{ $ka->id }}">{{ $ka->kode_absen }}</option>
-                                    @endforeach
+                                    @endforeach 
                                 </select>
                                 <button class="btn btn-outline-success" type="button" id="button_laporan"> Lihat </button>
                             </div>

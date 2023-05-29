@@ -80,7 +80,11 @@ class KepegawaianController extends Controller
             "foto" => "required",
             "email" => "required",
         ]);
-
+        $cek_email = User::where('email',$request->email)->first();
+        if($cek_email){
+            Alert::error('Gagal Simpan' , 'Email Sudah terdaftar');
+            return back();
+        }
         if ($request->hasFile('foto')) {
             $foto = Penilian::upload_foto($request->foto, $random, 'foto_pegawai');
         } else {

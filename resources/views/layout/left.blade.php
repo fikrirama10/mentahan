@@ -16,6 +16,8 @@
                 <div data-i18n="Dashboard">Dashboard</div>
             </a>
         </li>
+        @if (auth()->user()->id_jabatan == 1)
+        <!-- Menampilkan Menu admin -->
         <li class="menu-item {{ $id == 'kepegawaian' ? 'active' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons ti ti-users"></i>
@@ -52,6 +54,8 @@
                 <div data-i18n="Perangkingan">Perangkingan</div>
             </a>
         </li>
+        @endif
+
         <li class="menu-item {{ $id == 'laporan' ? 'active' : '' }}">
             <a href="{{ route('laporan') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-file-analytics"></i>
