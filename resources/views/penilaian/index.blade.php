@@ -6,7 +6,15 @@
             <h5 class="mb-0 card-title">Data Kepegawaian</h5>
         </div>
         <div class="card-body">
+
             <div class="table-responsive">
+                <label for="">Kode Kelas</label>
+                <select name="kode_kelas" id="kode_kelas" class='form-control'>
+                    <option value=""> -- Pilih Kode Kelas -- </option>
+                    @foreach ($noabsen as $na)
+                        <option value="{{ $na->id }}">{{ $na->kode_absen }}</option>
+                    @endforeach
+                </select>
                 <table id="tbl_list" class="table table-striped " cellspacing="0" width="100%">
                     <thead class='text-nowrap'>
                         <tr>
@@ -37,10 +45,15 @@
         
         $(document).ready(function() {
             
-            $('#tbl_list').DataTable({
+            var table = $('#tbl_list').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ url()->current() }}',
+                ajax: {
+                    url:'{{ route('penilaian') }}',
+                    data: function(d) {
+                        d.approved = $('#kode_kelas').val()
+                    },
+                },
                 fixedColumns: {
                     left: 0,
                     right: 1
@@ -129,6 +142,9 @@
                     },
 
                 ]
+            });
+            $('#kode_kelas').change(function() {
+                table.draw();
             });
         });
     </script>

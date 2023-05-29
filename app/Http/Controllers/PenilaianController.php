@@ -12,7 +12,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\View;
 class PenilaianController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if (request()->ajax()) {
             $data = DB::table('users')
@@ -25,7 +25,13 @@ class PenilaianController extends Controller
             return DataTables::query($data)->addColumn('action', function ($data) {
                 $html = '<a href="' . route('detail-pegawai', $data->id) . '" class="btn btn-info btn-xs"><i class=" tf-icons ti ti-edit"></i>Nilai</a>';
                 return $html;
-            })->rawColumns(['action'])->make(true);
+            })->filter(function ($instance) use ($request) {
+                if ($request->get('approved') != '') {
+                    $instance->where('id_presensi', $request->get('approved'));
+                }
+                
+            })
+            ->rawColumns(['action'])->make(true);
         }
         $noabsen = DB::table('tbl_kode_absen')->get();
         $jabatan = DB::table('tbl_jabatan')->get();
