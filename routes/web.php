@@ -7,6 +7,7 @@ use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,10 +29,11 @@ Route::group(['middleware' => ['guest']], function () {
 Route::group(['middleware' => ['auth']], function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/', function () {
+        $kode_absen = DB::table('tbl_kode_absen')->get();
         return view('welcome', [
             'title' => 'Dashboard',
             'id' => 'dashboard'
-        ]);
+        ],compact('kode_absen'));
     })->name('home');
 
     Route::group(['prefix' => 'profil'], function () {

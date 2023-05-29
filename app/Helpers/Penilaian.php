@@ -90,17 +90,20 @@ class Penilian
             'total_nilai'=>$total
         ]);
     }
+    //
     public static function cek_total2($id_nilai,$id_user){
+        //menampilkan seluruh data penulaian berdasarkan id tidak sama dengan 1 
         $kriteria = DB::table('tbl_kriteria')->where('id','!=',1)->get();
         
         foreach($kriteria as $kr){
            
             $penilaian =DB::table('tbl_penilaian_detail')->where('id_penilaian',$id_nilai)->where('id_kriteria',$kr->id)->where('id_user',$id_user)->get();
+            //jika penilaian detail sudah ada atau lebih dari 1
             if(count($penilaian) > 0){
                 $nilai = 0 ; $nilai = 0 ;
                 foreach($penilaian as $pn){
                     $sub_kriteria = DB::table('tbl_sub_kriteria')->where('id',$pn->id_sub_kriteria)->first();
-                    $nilai += $sub_kriteria->bobot_sub;
+                        $nilai += $sub_kriteria->bobot_sub;
                 }
                 $nilai_persen = ($kr->bobot / 100) * $nilai ;
                 DB::table('tbl_penilaian_total')->insert([
@@ -144,13 +147,23 @@ class Penilian
         $total = $total / 12;
         return round($total,2);
     }
-    public static function get_laporan_all($tahun,$kode_absen){
-        $nilai = DB::table('tbl_penilaian')->leftJoin('users','tbl_penilaian.id_user','=','users.id')->select([
-            'tbl_penilaian.*',
-            'users.name',
-            'users.no_presensi',
-            'users.aktif',
-        ])->where('tahun',$tahun)->where('users.aktif',1)->where('users.id_presensi',$kode_absen)->groupBy('id_user')->get();
+    public static function get_laporan_all($tahun,$kode_absen,$limit=null){
+        if($limit != null){
+            $nilai = DB::table('tbl_penilaian')->leftJoin('users','tbl_penilaian.id_user','=','users.id')->select([
+                'tbl_penilaian.*',
+                'users.name',
+                'users.no_presensi',
+                'users.aktif',
+            ])->where('tahun',$tahun)->where('users.aktif',1)->where('users.id_presensi',$kode_absen)->groupBy('id_user')->limit(10)->get();
+        }else{
+            $nilai = DB::table('tbl_penilaian')->leftJoin('users','tbl_penilaian.id_user','=','users.id')->select([
+                'tbl_penilaian.*',
+                'users.name',
+                'users.no_presensi',
+                'users.aktif',
+            ])->where('tahun',$tahun)->where('users.aktif',1)->where('users.id_presensi',$kode_absen)->groupBy('id_user')->get();
+        }
+        
         $array_nilai = array();        
         foreach($nilai as $n){
             $kriteria = DB::table('tbl_kriteria')->get();

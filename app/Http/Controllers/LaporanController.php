@@ -19,10 +19,15 @@ class LaporanController extends Controller
             'id' => 'laporan'
         ], compact('kode_absen'));
     }
-    public function lihat_laporan($tahun, $kode_absen)
+    public function lihat_laporan($tahun, $kode_absen , $limit = null)
     {
         $no =1; $ranking =1;
-        $array_nilai = Penilian::get_laporan_all($tahun, $kode_absen);
+        if($limit != null){
+            $array_nilai = Penilian::get_laporan_all($tahun, $kode_absen,$limit);
+        }else{
+            $array_nilai = Penilian::get_laporan_all($tahun, $kode_absen);
+        }
+        
         //return $array_nilai;
         return view('laporan.report', [
             'title' => 'Laporan',
