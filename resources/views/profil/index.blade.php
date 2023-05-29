@@ -53,15 +53,18 @@
 
                 </div>
                 <div class="col-md-3">
-                    <br>
-                    <div class="card">
-                        <img class="card-img-top" src="{{ asset('storage/foto_pegawai/'.$user->foto) }}" alt="Card image cap">
-                    </div>
-                    <hr>
-                    <label for="">Foto</label>
-                    <input type="file" class='form-control' name='foto'>
-                    <br>
-                    <button class='btn btn-success'>Update</button>
+                    <form method="post" enctype="multipart/form-data" action="{{ route('update-profil',auth()->user()->id) }}">
+                        @csrf
+                        <br>
+                        <div class="card">
+                            <img class="card-img-top" src="{{ asset('storage/foto_pegawai/'.$user->foto) }}" alt="Card image cap" >
+                        </div>
+                        <hr>
+                        <label for="">Foto</label>
+                        <input type="file" class='form-control' name='foto' accept=".jpg,.png">
+                        <br>
+                        <button class='btn btn-success'>Update</button>
+                    </form>                   
                 </div>
             </div>
         </div>
