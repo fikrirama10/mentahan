@@ -29,6 +29,16 @@ class PenilaianController extends Controller
                 if ($request->get('approved') != '') {
                     $instance->where('id_presensi', $request->get('approved'));
                 }
+                if (!empty($request->get('search'))) {
+                    $instance->where(function ($w) use ($request) {
+                        $search = $request->get('search');
+                        $w->orWhere('name', 'LIKE', "%$search%")
+                            ->orWhere('alamat', 'LIKE', "%$search%")
+                            ->orWhere('no_presensi', 'LIKE', "%$search%")
+                            ->orWhere('tbl_jabatan.jabatan', 'LIKE', "%$search%")
+                            ->orWhere('pendidikan', 'LIKE', "%$search%");
+                    });
+                }
                 
             })
             ->rawColumns(['action'])->make(true);
