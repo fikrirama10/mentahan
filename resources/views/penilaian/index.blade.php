@@ -51,7 +51,8 @@
                 ajax: {
                     url:'{{ route('penilaian') }}',
                     data: function(d) {
-                        d.approved = $('#kode_kelas').val()
+                        d.approved = $('#kode_kelas').val(),
+                        d.search = $('input[type="search"]').val()
                     },
                 },
                 fixedColumns: {
